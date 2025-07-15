@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Schema Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .overview {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            color: white;
+            text-align: center;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: top;
+        }
+
+        tr:hover {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e6f3ff 100%);
+            transform: scale(1.001);
+            transition: all 0.3s ease;
+        }
+
+        .model-name {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 16px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .field-type {
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #e74c3c;
+        }
+
+        .reference {
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .required {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .purpose {
+            color: #27ae60;
+            font-style: italic;
+        }
+
+        .enum-values {
+            background: #fff3cd;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #856404;
+        }
+
+        .architecture-note {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            border-left: 4px solid #e17055;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            color: #2d3436;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .badge-core {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .badge-content {
+            background: #3498db;
+            color: white;
+        }
+
+        .badge-config {
+            background: #f39c12;
+            color: white;
+        }
+
+        .badge-data {
+            background: #27ae60;
+            color: white;
+        }
+
+        .relationship-diagram {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .flow-item {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .arrow {
+            font-size: 20px;
+            color: #3498db;
+            margin: 0 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th,
+            td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🚀 Multi-Tenant Website Management Backend</h1>
+        <p class="subtitle">Complete Schema Documentation & Architecture Overview</p>
+
+        <div class="overview">
+            <h2>🏗️ System Architecture</h2>
+            <p>A powerful multi-tenant SaaS platform that allows admins to manage multiple websites from a single
+                dashboard, similar to Webflow or Vercel. Each admin can create and manage multiple websites with their
+                own content, settings, and configurations.</p>
+        </div>
+
+        <div class="relationship-diagram">
+            <h3>🔗 Data Flow & Relationships</h3>
+            <div style="margin: 20px 0;">
+                <span class="flow-item">Admin</span>
+                <span class="arrow">→</span>
+                <span class="flow-item">AdminPanel</span>
+                <span class="arrow">→</span>
+                <span class="flow-item">Website</span>
+                <span class="arrow">→</span>
+                <span class="flow-item">WebsitePanel</span>
+                <span class="arrow">→</span>
+                <span class="flow-item">Content (Blog, Banner, Category)</span>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Model Name</th>
+                        <th>Field Name</th>
+                        <th>Data Type</th>
+                        <th>Constraints</th>
+                        <th>Purpose & Description</th>
+                        <th>Business Logic</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="2" class="model-name">
+                            <span class="badge badge-core">CORE</span>
+                            Admin
+                        </td>
+                        <td>username</td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="required">Required</span></td>
+                        <td>Unique identifier for admin login</td>
+                        <td>Authentication & user identification</td>
+                    </tr>
+                    <tr>
+                        <td>email</td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="required">Required</span></td>
+                        <td>Admin's email for notifications & recovery</td>
+                        <td>Communication & account recovery</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>password</td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="required">Required</span></td>
+                        <td>Encrypted password for authentication</td>
+                        <td>Security & access control</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>panelData</td>
+                        <td><span class="field-type">ObjectId</span></td>
+                        <td><span class="reference">→ AdminPanel</span>, <span class="required">Required</span></td>
+                        <td>Links admin to their dashboard panel</td>
+                        <td>One-to-one relationship with admin panel</td>
+                    </tr>
+
+                    <tr>
+                        <td rowspan="1" class="model-name">
+                            <span class="badge badge-core">CORE</span>
+                            AdminPanel
+                        </td>
+                        <td>websites</td>
+                        <td><span class="field-type">Array[ObjectId]</span></td>
+                        <td><span class="reference">→ Website[]</span></td>
+                        <td>Collection of websites managed by admin</td>
+                        <td>Multi-tenant architecture - one admin manages multiple websites</td>
+                    </tr>
+
+                    <tr>
+                        <td rowspan="8" class="model-name">
+                            <span class="badge badge-core">CORE</span>
+                            Website
+                        </td>
+                        <td>owner</td>
+                        <td><span class="field-type">ObjectId</span></td>
+                        <td><span class="reference">→ Admin</span></td>
+                        <td>Admin who owns this website</td>
+                        <td>Ownership & permission control</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="required">Required</span></td>
+                        <td>Display name of the website</td>
+                        <td>Website identification in dashboard</td>
+                    </tr>
+                    <tr>
+                        <td>domain</td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="required">Required</span></td>
+                        <td>Website's domain/URL</td>
+                        <td>Public access point for the website</td>
+                    </tr>
+                    <tr>
+                        <td>token</td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="required">Unique</span></td>
+                        <td>API token for website operations</td>
+                        <td>Secure API access & authentication</td>
+                    </tr>
+                    <tr>
+                        <td>healthCheckURL</td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Optional</td>
+                        <td>URL for monitoring website health</td>
+                        <td>Uptime monitoring & status checking</td>
+                    </tr>
+                    <tr>
+                        <td>status</td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="enum-values">active | inactive</span></td>
+                        <td>Current operational status</td>
+                        <td>Enable/disable website functionality</td>
+                    </tr>
+                    <tr>
+                        <td>webPanel</td>
+                        <td><span class="field-type">ObjectId</span></td>
+                        <td><span class="reference">→ WebsitePanel</span></td>
+                        <td>Website's configuration panel</td>
+                        <td>One-to-one relationship with website settings</td>
+                    </tr>
+                    <tr>
+                        <td>adminPanel</td>
+                        <td><span class="field-type">ObjectId</span></td>
+                        <td><span class="reference">→ AdminPanel</span></td>
+                        <td>Parent admin panel reference</td>
+                        <td>Multi-tenant relationship tracking</td>
+                    </tr>
+
+                    <tr>
+                        <td rowspan="6" class="model-name">
+                            <span class="badge badge-config">CONFIG</span>
+                            WebsitePanel
+                        </td>
+                        <td>website</td>
+                        <td><span class="field-type">ObjectId</span></td>
+                        <td><span class="reference">→ Website</span>, <span class="required">Required</span>, <span
+                                class="required">Unique</span></td>
+                        <td>One-to-one website reference</td>
+                        <td>Each website has exactly one configuration panel</td>
+                    </tr>
+                    <tr>
+                        <td>settings.theme</td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Optional</td>
+                        <td>Website's visual theme</td>
+                        <td>UI/UX customization</td>
+                    </tr>
+                    <tr>
+                        <td>settings.logoUrl</td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Optional</td>
+                        <td>Website's logo image URL</td>
+                        <td>Branding & visual identity</td>
+                    </tr>
+                    <tr>
+                        <td>settings.socialLinks</td>
+                        <td><span class="field-type">Object</span></td>
+                        <td>facebook, twitter, instagram</td>
+                        <td>Social media integration</td>
+                        <td>Marketing & social presence</td>
+                    </tr>
+                    <tr>
+                        <td>customCode.header</td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Optional</td>
+                        <td>Custom HTML/JS for header</td>
+                        <td>Advanced customization & analytics</td>
+                    </tr>
+                    <tr>
+                        <td>customCode.footer</td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Optional</td>
+                        <td>Custom HTML/JS for footer</td>
+                        <td>Advanced customization & tracking</td>
+                    </tr>
+
+                    <tr>
+                        <td rowspan="7" class="model-name">
+                            <span class="badge badge-content">CONTENT</span>
+                            Blog
+                        </td>
+                        <td>panel</td>
+                        <td><span class="field-type">ObjectId</span></td>
+                        <td><span class="reference">→ WebsitePanel</span></td>
+                        <td>Associated website panel</td>
+                        <td>Multi-tenant content isolation</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Optional</td>
+                        <td>Blog post title</td>
+                        <td>Content identification & SEO</td>
+                    </tr>
+                    <tr>
+                        <td>description</td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Optional</td>
+                        <td>Blog post summary/excerpt</td>
+                        <td>SEO meta description & previews</td>
+                    </tr>
+                    <tr>
+                        <td>metaURL</td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Optional</td>
+                        <td>SEO-friendly URL slug</td>
+                        <td>Search engine optimization</td>
+                    </tr>
+                    <tr>
+                        <td>category</td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Optional</td>
+                        <td>Blog post category</td>
+                        <td>Content organization & filtering</td>
+                    </tr>
+                    <tr>
+                        <td>images</td>
+                        <td><span class="field-type">Array[String]</span></td>
+                        <td>Optional</td>
+                        <td>Blog post image URLs</td>
+                        <td>Visual content & engagement</td>
+                    </tr>
+                    <tr>
+                        <td>content</td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Optional</td>
+                        <td>Blog post HTML/text content</td>
+                        <td>Main article content</td>
+                    </tr>
+
+                    <tr>
+                        <td rowspan="3" class="model-name">
+                            <span class="badge badge-content">CONTENT</span>
+                            Banner
+                        </td>
+                        <td>panel</td>
+                        <td><span class="field-type">ObjectId</span></td>
+                        <td><span class="reference">→ WebsitePanel</span></td>
+                        <td>Associated website panel</td>
+                        <td>Multi-tenant content isolation</td>
+                    </tr>
+                    <tr>
+                        <td>title</td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Optional</td>
+                        <td>Banner display text</td>
+                        <td>Marketing & promotional content</td>
+                    </tr>
+                    <tr>
+                        <td>image</td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Optional</td>
+                        <td>Banner image URL</td>
+                        <td>Visual marketing content</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>link</td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Optional</td>
+                        <td>Banner click destination</td>
+                        <td>Call-to-action & navigation</td>
+                    </tr>
+
+                    <tr>
+                        <td rowspan="3" class="model-name">
+                            <span class="badge badge-content">CONTENT</span>
+                            Category
+                        </td>
+                        <td>panel</td>
+                        <td><span class="field-type">ObjectId</span></td>
+                        <td><span class="reference">→ WebsitePanel</span></td>
+                        <td>Associated website panel</td>
+                        <td>Multi-tenant content isolation</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Optional</td>
+                        <td>Category display name</td>
+                        <td>Content organization</td>
+                    </tr>
+                    <tr>
+                        <td>logo</td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Optional</td>
+                        <td>Category icon/logo URL</td>
+                        <td>Visual categorization</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>slug</td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Optional</td>
+                        <td>URL-friendly category identifier</td>
+                        <td>SEO & navigation</td>
+                    </tr>
+
+                    <tr>
+                        <td rowspan="4" class="model-name">
+                            <span class="badge badge-data">DATA</span>
+                            WebsiteData
+                        </td>
+                        <td>website</td>
+                        <td><span class="field-type">ObjectId</span></td>
+                        <td><span class="reference">→ Website</span>, <span class="required">Required</span>, <span
+                                class="required">Unique</span></td>
+                        <td>One-to-one website reference</td>
+                        <td>Aggregated content storage per website</td>
+                    </tr>
+                    <tr>
+                        <td>categories</td>
+                        <td><span class="field-type">Object</span></td>
+                        <td>name, logo, slug</td>
+                        <td>Embedded category data</td>
+                        <td>Denormalized for fast access</td>
+                    </tr>
+                    <tr>
+                        <td>blogs</td>
+                        <td><span class="field-type">Object</span></td>
+                        <td>name, description, metaURL, images, content</td>
+                        <td>Embedded blog data</td>
+                        <td>Denormalized for fast access</td>
+                    </tr>
+                    <tr>
+                        <td>banner</td>
+                        <td><span class="field-type">Object</span></td>
+                        <td>name, image, link</td>
+                        <td>Embedded banner data</td>
+                        <td>Denormalized for fast access</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="architecture-note">
+            <h3>🔧 Architecture Highlights</h3>
+            <p><strong>Multi-Tenant Design:</strong> Each admin can manage multiple websites through a single dashboard,
+                with complete data isolation between tenants.</p>
+            <p><strong>Hierarchical Structure:</strong> Admin → AdminPanel → Website → WebsitePanel → Content (Blog,
+                Banner, Category)</p>
+            <p><strong>Flexible Content Management:</strong> Each website has its own panel for managing blogs, banners,
+                categories, and custom settings.</p>
+        </div>
+
+        <div class="warning">
+            <h3>⚠️ Schema Optimization Suggestions</h3>
+            <p><strong>WebsiteData Model:</strong> This appears to be a denormalized storage model. Consider whether you
+                need both normalized (Blog, Banner, Category) and denormalized (WebsiteData) approaches, or if you can
+                optimize for one pattern.</p>
+            <p><strong>Missing Indexes:</strong> Consider adding indexes on frequently queried fields like
+                website.domain, website.token, and all reference fields.</p>
+        </div>
+    </div>
+</body>
+
+</html>
